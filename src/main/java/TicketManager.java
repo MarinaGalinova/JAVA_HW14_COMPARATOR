@@ -31,18 +31,30 @@ public class TicketManager {
         for (Ticket ticket : repo.getTickets()) {
             if (matches1(ticket, from) & matches2(ticket, too)) {
                 Ticket[] tmp = new Ticket[result.length + 1]; // временный массив в случае совпадения
-                for (int i = 0; i < tmp.length; i++) {
+                for (int i = 0; i < tmp.length-1; i++) {
                     if (result.length > 0) {
                         tmp[i] = result[i]; //перекладываем подходящие билеты из старого массива в новый
                     }
-                    result = tmp;
                 }
+                result = tmp;
                 result[findAllTickets] = ticket;
                 findAllTickets++;// "добавляем в конец" массива result билет ticket
             }
         }
-        TicketComparator ticketComparator = new TicketComparator();
-        Arrays.sort(result, ticketComparator);
+        if (result.length >= 2) {
+            TicketComparator ticketComparator = new TicketComparator();
+            //        Arrays.sort(result, ticketComparator);
+            Ticket tmp_ticket = result[0];
+            for (int i = 0; i < result.length; i++) {
+                for (int j = 0; j < result.length - i - 1; j++) {
+                    if (ticketComparator.compare(result[j], result[j + 1]) == 1) {
+                        tmp_ticket = result[j];
+                        result[j] = result[j + 1];
+                        result[j + 1] = tmp_ticket;
+                    }
+                }
+            }
+        }
         return result;
     }
 
