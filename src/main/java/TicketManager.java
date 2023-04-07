@@ -15,12 +15,12 @@ public class TicketManager {
     }
 
 
-    public boolean matches1(Ticket ticket, String from) {
+    public boolean matchesFrom(Ticket ticket, String from) {
         String s1 = ticket.getFrom();
         return ticket.getFrom().contains(from);
     }
 
-    public boolean matches2(Ticket ticket, String too) {
+    public boolean matchesTo(Ticket ticket, String too) {
         String s2 = ticket.getTo();
         return ticket.getTo().contains(too);
     }
@@ -29,7 +29,7 @@ public class TicketManager {
         int findAllTickets = 0;
         Ticket[] result = new Ticket[0]; // тут будем хранить подошедшие запросу билеты
         for (Ticket ticket : repo.getTickets()) {
-            if (matches1(ticket, from) & matches2(ticket, too)) {
+            if (matchesFrom(ticket, from) & matchesTo(ticket, too)) {
                 Ticket[] tmp = new Ticket[result.length + 1]; // временный массив в случае совпадения
                 for (int i = 0; i < tmp.length-1; i++) {
                     if (result.length > 0) {
@@ -44,13 +44,13 @@ public class TicketManager {
         if (result.length >= 2) {
             TicketComparator ticketComparator = new TicketComparator();
             //        Arrays.sort(result, ticketComparator);
-            Ticket tmp_ticket = result[0];
+            Ticket tmpTicket = result[0];
             for (int i = 0; i < result.length; i++) {
                 for (int j = 0; j < result.length - i - 1; j++) {
                     if (ticketComparator.compare(result[j], result[j + 1]) == 1) {
-                        tmp_ticket = result[j];
+                        tmpTicket = result[j];
                         result[j] = result[j + 1];
-                        result[j + 1] = tmp_ticket;
+                        result[j + 1] = tmpTicket;
                     }
                 }
             }
